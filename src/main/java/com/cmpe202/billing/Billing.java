@@ -103,15 +103,18 @@ public class Billing {
 			throws IOException {
 		String outputFile = "output.csv";
 		String errorFile = "errors.txt";
-		Receipt receipt = (Receipt) factory.getOutput("RECEIPT", outputFile);
-		String heading = "Item,Quantity,Price,TotalPrice,\n";
-		receipt.output(
-				receipt.addAmountForCSV(heading, amount, lineItems));
-		Outputter err_bill = factory.getOutput("ERROR_RECEIPT", errorFile);
-		String err_msg = "Errors\n";
-		if (errors.length() > 0)
+
+		if (errors.length() > 0) {
+			Outputter err_bill = factory.getOutput("ERROR_RECEIPT", errorFile);
+			String err_msg = "Errors\n";
 			err_msg += errors;
-		err_bill.output(err_msg);
+			err_bill.output(err_msg);
+		} else {
+			Receipt receipt = (Receipt) factory.getOutput("RECEIPT", outputFile);
+			String heading = "Item,Quantity,Price,TotalPrice,\n";
+			receipt.output(
+					receipt.addAmountForCSV(heading, amount, lineItems));
+		}
 	};
 
 	public static void main(String[] args) {
